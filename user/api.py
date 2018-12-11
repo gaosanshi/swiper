@@ -3,7 +3,7 @@ from common import errors
 from lib.http import render_json
 from lib.sms import send_verify_code
 from lib.sms import check_vcode
-from user.models import User
+from user.models import User, Profile
 
 
 def get_verify_code(request):
@@ -23,10 +23,13 @@ def login(request):
 
 
 def show_profile(request):
-    return None
+    user = request.user
+    user.profile = Profile.objects.create(id=user.id)
+    return render_json(user.profile.to_dict())
 
 
 def modify_profile(request):
+    request.user
     return None
 
 
