@@ -7,3 +7,9 @@ HY_SMS_PARAMS = {
     'mobile': None,
     'format': 'json',
 }
+
+# 七牛云配置
+QN_ACCESS_KEY = 'kEMOsRR-meB92XU43_a6xZqhiyyTuu5yreGCbFtw'
+QN_SECRET_KEY = 'QxTKqgnOb_UVldphU261qu9IdzmjkgGHh6GQVPPy'
+QN_BASE_URL = 'pjkb13uwa.bkt.clouddn.com'
+QN_BUCKET = 'swiper-gp'

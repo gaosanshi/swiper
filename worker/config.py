@@ -8,3 +8,4 @@ result_backend = 'redis://127.0.0.1:6379/0'
 result_serializer = 'pickle'
 result_cache_max = 10000 # 任务结果最⼤缓存数量
 worker_redirect_stdouts_level = 'INFO'
+

@@ -4,7 +4,9 @@ from lib.http import render_json
 from lib.sms import send_verify_code
 from lib.sms import check_vcode
 from user.forms import ProfileForm
-from user.models import User, Profile
+from user.logic import save_upload_file
+from user.logic import upload_avatar_to_qiniu
+from user.models import User
 
 
 def get_verify_code(request):
@@ -14,13 +16,13 @@ def get_verify_code(request):
 
 def login(request):
     phonenum = request.POST.get('phonenum')
-    vcode = request.POST.get('vcode')
+    vcode = int(request.POST.get('vcode'))
     if check_vcode(phonenum, vcode):
         user = User.objects.get_or_create(phonenum=phonenum)
         request.session['uid'] = user.id
         return render_json(user.to_dict())
     else:
-        return render_json(None, errors.VCODE_ERROR)
+        return render_json(None, errors.VcodeError.code)
 
 
 def show_profile(request):
@@ -38,8 +40,12 @@ def modify_profile(request):
         profile.save()
         return render_json(profile.to_dict())
     else:
-        return render_json(form.errors, errors.PROFILE_ERROR)
+        return render_json(form.errors, errors.ProfileError.code)
 
 
 def upload_avatar(request):
-    return None
+    '''上传个人形象'''
+    avatar = request.FILES.get('avatar')
+    filepath,filename = save_upload_file(request.user, avatar)
+    upload_avatar_to_qiniu(request.user, filepath, filename)
+    return render_json(None)
