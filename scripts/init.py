@@ -74,15 +74,16 @@ def create_robots(n):
 
 def init_permission():
     '''创建权限模型'''
-    permission_names = [
-        'vipflag',       # 会员身份标识
-        'superlike',     # 超级喜欢
-        'rewind',        # 反悔功能
-        'anylocation',   # 任意更改定位
-        'unlimit_like',  # 无限喜欢次数
+    permissions = [
+        ('vipflag', '会员身份标识'),
+         ('superlike', '超级喜欢'),
+          ('rewind', '反悔功能'),
+           ('anylocation', '任意更改定位'),
+            ('unlimit_like', '无限喜欢次数'),
+             ('show_liked_me', '喜欢过我的人'),
     ]
 
-    for name in permission_names:
+    for name,desc in permissions:
         perm, _ = Permission.objects.get_or_create(name=name)
         print('create permission %s' % perm.name)
 
@@ -90,7 +91,7 @@ def init_permission():
 def init_vip():
     for i in range(4):
         vip, _ = Vip.objects.get_or_create(
-            name='会员-%d' % i,
+            name='%d级会员' % i,
             level=i,
             price=i * 5.0
         )
@@ -118,9 +119,11 @@ def create_vip_perm_relations():
     # 给 VIP 2 分配权限
     VipPermRelation.objects.get_or_create(vip_id=vip2.id, perm_id=vipflag.id)
     VipPermRelation.objects.get_or_create(vip_id=vip2.id, perm_id=rewind.id)
+    VipPermRelation.objects.get_or_create(vip_id=vip2.id, perm_id=superlike.id)
 
     # 给 VIP 3 分配权限
     VipPermRelation.objects.get_or_create(vip_id=vip3.id, perm_id=vipflag.id)
+    VipPermRelation.objects.get_or_create(vip_id=vip3.id, perm_id=superlike.id)
     VipPermRelation.objects.get_or_create(vip_id=vip3.id, perm_id=superlike.id)
     VipPermRelation.objects.get_or_create(vip_id=vip3.id, perm_id=rewind.id)
     VipPermRelation.objects.get_or_create(vip_id=vip3.id, perm_id=anylocation.id)

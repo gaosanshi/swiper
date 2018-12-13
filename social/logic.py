@@ -2,6 +2,7 @@
 import datetime
 from user.models import User
 from social.models import Swiped, Friend
+from vip.logic import need_perm
 
 
 def rcmd_users(user):
@@ -48,6 +49,6 @@ def rewind(user):
 
 
 def users_liked_me(user):
-    swipes = Swiped.like_me(user.id)
+    swipes = Swiped.liked_me(user.id)
     swiper_uid_list = [s.uid for s in swipes]
     return User.objects.filter(id__in=swiper_uid_list)
