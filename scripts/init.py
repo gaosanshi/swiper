@@ -132,6 +132,6 @@ def create_vip_perm_relations():
 
 if __name__ == '__main__':
     create_robots(1000)
-    # init_permission()
-    # init_vip()
-# create_vip_perm_relations()
+    init_permission()
+    init_vip()
+    create_vip_perm_relations()
