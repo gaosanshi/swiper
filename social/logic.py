@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 import datetime
 from user.models import User
-from social.models import Swipre, Friend
+from social.models import Swiped, Friend
 
 
 def rcmd_users(user):
@@ -18,9 +18,36 @@ def rcmd_users(user):
 
 
 def like_someone(user, sid):
-    Swipre.like(user.id, sid)
-    if Swipre.is_liked(sid, user.id):  # 检查对方是否喜欢过自己
+    Swiped.like(user.id, sid)
+    if Swiped.is_liked(sid, user.id):  # 检查对方是否喜欢过自己
         Friend.make_friends(user.id, sid)
         return True
     else:
         return False
+
+
+def superlike_someone(user, sid):
+    Swiped.like(user.id, sid)
+    if Swiped.is_liked(sid, user.id):  # 检查对方是否喜欢过自己
+        Friend.make_friends(user.id, sid)
+        return True
+    else:
+        return False
+
+
+def rewind(user):
+    '''反悔'''
+    # 取出最后一次滑动记录
+    swiped = Swiped.objects.filter(uid=user.id).latest()
+
+    # 删除好友关系
+    if swiped.flag in ['superlike', 'like']:
+        Friend.break_off(user.id, swiped.sid)
+    # 删除滑动记录
+    swiped.delete()
+
+
+def users_liked_me(user):
+    swipes = Swiped.like_me(user.id)
+    swiper_uid_list = [s.uid for s in swipes]
+    return User.objects.filter(id__in=swiper_uid_list)
