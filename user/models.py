@@ -1,11 +1,10 @@
 import datetime
 from django.db import models
-from lib.orm import ModelMixin
 from social.models import Friend
 from vip.models import Vip
 
 
-class User(models.Model, ModelMixin):
+class User(models.Model):
     SEX = (
         ('男性', '男性'),
         ('女性', '女性')
@@ -62,7 +61,7 @@ class User(models.Model, ModelMixin):
         }
 
 
-class Profile(models.Model, ModelMixin):
+class Profile(models.Model):
     SEX = (
         ('男性', '男性'),
         ('女性', '女性')
